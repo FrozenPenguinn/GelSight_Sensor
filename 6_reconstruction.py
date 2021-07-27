@@ -76,7 +76,7 @@ for x in range(0, width - 1):
 print("sum of error is: " + str(np.sum(e)))
 
 # visual augmentation
-zmap = zmap * 3
+#zmap = zmap * 3
 
 # visualize 3D height map
 fig = plt.figure(figsize = (8,8), dpi = 80)
