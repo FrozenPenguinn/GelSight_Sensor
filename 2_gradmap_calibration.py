@@ -20,6 +20,7 @@ diff_img = (raw_img.astype(int) - bg_img.astype(int))
 #print(contact_mask.shape)
 for color_channel in range(0, 3):
     diff_img[:,:,color_channel] = diff_img[:,:,color_channel] * contact_mask
+
 '''
 # testing
 display = diff_img[:,:,2]
@@ -27,6 +28,7 @@ plt.imshow(display)
 plt.colorbar()
 plt.show()
 '''
+
 # calibration image data
 height, width = raw_img.shape[0:2]
 cy = height / 2
@@ -82,6 +84,7 @@ for x in range(0, width):
             countmap[dx][dy] += 1
 
 # gradmap = np.round(gradmap).astype(int)
+
 '''
 # testing
 plt.xlabel('x')

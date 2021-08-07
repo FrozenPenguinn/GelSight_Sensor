@@ -9,8 +9,11 @@ from scipy.fftpack import dst, idst
 grad = np.load( "grad.npy" )
 gx = grad[:,:,0]
 gy = grad[:,:,1]
-width, height, dim = grad.shape
-xdim, ydim, dim = grad.shape
+ydim, xdim, dim = grad.shape
+
+# create smallest enclosing rectangle
+max_dim = max(xdim, ydim)
+min_dim = min(xdim, ydim)
 
 print(1)
 
@@ -40,8 +43,8 @@ zmap = gaussian_filter(zmap, sigma = 3)
 gxx = np.zeros((ydim, xdim))
 gyy = np.zeros((ydim, xdim))
 f = np.zeros((ydim, xdim))
-gyy[1:ydim, 0:xdim-1] = gy[1:ydim, 0:xdim-1]-gy[0:ydim-1, 0:xdim-1] # dG/dy
-gxx[0:ydim-1, 1:xdim] = gx[0:ydim-1, 1:xdim]-gx[0:ydim-1, 0:xdim-1] # dF/dx
+gyy[1:,:-1] = gy[1:,:-1] - gy[:-1,:-1] # dG/dy
+gxx[:-1,1:] = gx[:-1,1:] - gx[:-1,:-1] # dF/dx
 f = gxx + gyy # sum of Laplacian
 height, width = f.shape[:2]
 f2 = f[1 : height - 1, 1: width - 1]
@@ -62,29 +65,44 @@ zmap[zmap < 0] = 0
 
 # reconstruction based on MG iterator
 
-print(2)
+# zmap expansion
+hmap = np.zeros([max_dim, max_dim], dtype = float)
+#print(max_dim)
+#print(min_dim)
+lower = int((max_dim - min_dim) / 2)
+upper = int(lower + min_dim)
+#print(upper)
+#print(lower)
+if (max_dim == width):
+    #print("yes")
+    hmap[lower:upper,:] = zmap
+else:
+    #print("no")
+    hmap[:,lower:upper] = zmap
 
+print(2)
+'''
 # check error
 p = np.zeros([width, height], dtype = float)
 q = np.zeros([width, height], dtype = float)
 e = np.zeros([width, height], dtype = float)
-for x in range(0, width - 1):
-    for y in range(0, height - 1):
+for x in range(0, ydim - 1):
+    for y in range(0, xdim - 1):
         p[x][y] = zmap[x + 1][y] - zmap[x][y]
         q[x][y] = zmap[x][y + 1] - zmap[x][y]
         e[x][y] = pow(p[x][y] - grad[x][y][0], 2) + pow(q[x][y] - grad[x][y][1], 2)
 print("sum of error is: " + str(np.sum(e)))
-
+'''
 # visual augmentation
-#zmap = zmap * 3
+zmap = hmap * 3
 
 # visualize 3D height map
 fig = plt.figure(figsize = (8,8), dpi = 80)
 ax = Axes3D(fig, auto_add_to_figure = False)
 ax = fig.add_subplot(1, 1, 1, projection='3d') # first plot
 fig.add_axes(ax)
-x = np.arange(0, width, 1)
-y = np.arange(0, height, 1)
+x = np.arange(0, max_dim, 1)
+y = np.arange(0, max_dim, 1)
 x, y = np.meshgrid(x, y)
 #ax.plot_surface(x, y, zmap, rstride = 5, cstride = 5, cmap = plt.get_cmap('rainbow'))
 ax.plot_surface(x, y, zmap, rstride = 5, cstride = 5)
@@ -92,9 +110,9 @@ ax.plot_surface(x, y, zmap, rstride = 5, cstride = 5)
 ax.set_xlabel('x')
 ax.set_ylabel('y')
 ax.set_zlabel('z')
-ax.set_xlim3d(0, width + 1)
-ax.set_ylim3d(0, height + 1)
-ax.set_zlim3d(0, height + 1)
+ax.set_xlim3d(0, max_dim)
+ax.set_ylim3d(0, max_dim)
+ax.set_zlim3d(0, max_dim)
 ax.set_title('surface reconstructed')
 
 '''

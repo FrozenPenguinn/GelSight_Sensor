@@ -73,6 +73,7 @@ raw_img = cv2.GaussianBlur(raw_img,(3,3),0)
 bg_img = cv2.imread("./testing/bg_img.jpg")
 bg_img = cv2.GaussianBlur(bg_img,(3,3),0)
 height, width = raw_img.shape[0:2]
+print(height, width)
 
 # get difference in seperate color channels
 diff_img = np.zeros_like(raw_img)
@@ -96,9 +97,9 @@ count_same = 0
 count_multi_clu = 0
 count_dif = 0
 count_dif_multi = 0
-for x in range(0, width):
-    print(str(x)+"/"+str(width))
-    for y in range(0, height):
+for y in range(0, height):
+    print(str(y)+"/"+str(height))
+    for x in range(0, width):
         R = diff_img[y][x][2]
         G = diff_img[y][x][1]
         B = diff_img[y][x][0]
@@ -110,9 +111,9 @@ for x in range(0, width):
             else:
                 count_multi_clu += 1
                 min = 1e+10
-                dI_img = np.asarray([dR_img[0][x][y] + dR_img[1][x][y],
-                                     dG_img[0][x][y] + dG_img[1][x][y],
-                                     dB_img[0][x][y] + dB_img[1][x][y]])
+                dI_img = np.asarray([dR_img[0][y][x] + dR_img[1][y][x],
+                                     dG_img[0][y][x] + dG_img[1][y][x],
+                                     dB_img[0][y][x] + dB_img[1][y][x]])
                 # choose most suitable if more than one cluster in bin
                 for index in range(0, len(rgbmap_kd[R,G,B])):
                     p = rgbmap_kd[R,G,B][index][0]
@@ -151,13 +152,13 @@ for x in range(0, width):
                 grad[x][y][0] = grad[x][y][0] + diff[0]
                 grad[x][y][1] = grad[x][y][1] + diff[1]
             else: # more than one cluster in closest key
-                print("This is original: " + str(R) + " " + str(R) + " " + str(R))
-                print("This is closest: " + str(closest_key))
+                #print("This is original: " + str(R) + " " + str(R) + " " + str(R))
+                #print("This is closest: " + str(closest_key))
                 count_dif_multi += 1
                 min = 1e+10
-                dI_img = np.asarray([dR_img[0][x][y] + dR_img[1][x][y],
-                                     dG_img[0][x][y] + dG_img[1][x][y],
-                                     dB_img[0][x][y] + dB_img[1][x][y]])
+                dI_img = np.asarray([dR_img[0][y][x] + dR_img[1][y][x],
+                                     dG_img[0][y][x] + dG_img[1][y][x],
+                                     dB_img[0][y][x] + dB_img[1][y][x]])
                 # choose most suitable if more than one cluster in bin
                 #print("multi")
                 for index in range(0, len(rgbmap_kd[R,G,B])):
@@ -182,8 +183,6 @@ print("This is count same: " + str(count_same))
 print("This is count multi clu: " + str(count_multi_clu))
 print("This is count diff: " + str(count_dif))
 print("This is count dif multi: " + str(count_dif_multi))
-grad[:,:,0] = grad[:,:,0]
-grad[:,:,1] = grad[:,:,1]
 map1 = np.flip(np.transpose(grad[:,:,0]), 0)
 map2 = np.flip(np.transpose(grad[:,:,1]), 0)
 x = np.arange(0, width, 1)
@@ -204,7 +203,7 @@ axes[0].set_title("Red difference")
 axes[1].set_title("Gradient in X-direction")
 fig.colorbar(im1, ax=axes[0])
 fig.colorbar(im2, ax=axes[1])
-
+print(raw_img.shape)
 plt.show()
 
 # saving the gradients
