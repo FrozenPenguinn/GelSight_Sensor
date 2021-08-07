@@ -5,8 +5,8 @@ import matplotlib
 from math import atan2, pi, sqrt
 
 # import background and contact image
-bg_img = cv2.imread("./calibration/bg_img.jpg")
-raw_img = cv2.imread("./calibration/raw_img.jpg")
+bg_img = cv2.imread("./testing/bg_img.jpg")
+raw_img = cv2.imread("./testing/raw_img.jpg")
 bg_img = cv2.GaussianBlur(bg_img, (3, 3), 0)
 raw_img = cv2.GaussianBlur(raw_img, (3, 3), 0)
 
@@ -17,7 +17,7 @@ height, width = raw_img.shape[0:2]
 center_y = int(height / 2)
 center_x = int(width / 2)
 p2mm = 58.16
-radius = 4 * p2mm
+radius = 2 * p2mm
 
 # cut out a line segment of the difference image
 color_change = diff_img[center_y,:,2]
@@ -65,8 +65,8 @@ yaw_flat = yaw.flatten()
 yaw_ground_flat = yaw_ground.flatten()
 
 # ground truth line
-line1_x = [0,40]
-line1_y = [0,40]
+line1_x = [0,60]
+line1_y = [0,60]
 line2_x = [-200,200]
 line2_y = [-200,200]
 
@@ -81,10 +81,10 @@ plt.setp(axes[:], xlabel='Ground Truth')
 plt.setp(axes[:], ylabel='Measured Value')
 axes[0].set_title("Pitch of Surface Normal (deg)")
 axes[1].set_title("Yaw of Surface Normal (deg)")
-axes[0].plot(pitch_ground_flat, pitch_flat, 'x', color='blue')
+axes[0].plot(pitch_ground_flat, pitch_flat, 'o', color='blue', markersize=1)
 axes[0].plot(line1_x, line1_y, color='red')
 axes[0].text(28, -0.5, r_squared_pitch, fontsize=10,  color='black')
-axes[1].plot(yaw_ground_flat, yaw_flat, 'x', color='blue')
+axes[1].plot(yaw_ground_flat, yaw_flat, 'o', color='blue', markersize=1)
 axes[1].plot(line2_x, line2_y, color='red')
 axes[1].text(100, -205, r_squared_yaw, fontsize=10,  color='black')
 plt.show()
