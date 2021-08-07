@@ -71,8 +71,8 @@ line2_x = [-200,200]
 line2_y = [-200,200]
 
 # find r_squared
-r_squared_pitch = "r^2 = " + str(round(pow(np.corrcoef(pitch_ground_flat, pitch_flat)[0,1],2),3))
-r_squared_yaw = "r^2 = " + str(round(pow(np.corrcoef(yaw_ground_flat, yaw_flat)[0,1],2),3))
+r_squared_pitch = "$r^{2}$ = " + str(round(pow(np.corrcoef(pitch_ground_flat, pitch_flat)[0,1],2),3))
+r_squared_yaw = "$r^{2}$ = " + str(round(pow(np.corrcoef(yaw_ground_flat, yaw_flat)[0,1],2),3))
 
 matplotlib.rc('figure', figsize=(10, 5))
 fig, axes = plt.subplots(1, 2)

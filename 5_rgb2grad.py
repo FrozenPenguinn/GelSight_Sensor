@@ -138,11 +138,12 @@ for y in range(0, height):
             #print(R,G,B)
             #print(closest_key)
             if(len(rgbmap_kd[closest_key]) == 1): # only one cluster in closest key
-                #count_dif += 1
+                count_dif += 1
                 grad[x][y][0] = rgbmap_kd[R,G,B][0][0]
                 grad[x][y][1] = rgbmap_kd[R,G,B][0][1]
                 #print("diff key")
                 J = rgbmap_kd[closest_key][0][2]
+                #print("start")
                 #print(J)
                 J_tik = inv(J.T.dot(J) + 0.05 * np.identity(2)).dot(J.T)
                 #print(J_tik)
@@ -151,6 +152,8 @@ for y in range(0, height):
                 #print(diff)
                 grad[x][y][0] = grad[x][y][0] + diff[0]
                 grad[x][y][1] = grad[x][y][1] + diff[1]
+                #print(grad[x][y])
+                #print("finish")
             else: # more than one cluster in closest key
                 #print("This is original: " + str(R) + " " + str(R) + " " + str(R))
                 #print("This is closest: " + str(closest_key))

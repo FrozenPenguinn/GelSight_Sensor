@@ -20,10 +20,10 @@ for x in range(0, xdim):
         magnitude[y, x] = sqrt(pow(gx[y, x],2) + pow(gy[y, x],2))
         orientation[y, x] = atan2(gy[y, x], gx[y, x])
 '''
-x_upper = 80
-x_lower = 50
-y_upper = 80
-y_lower = 50
+x_upper = 145
+x_lower = 45
+y_upper = 145
+y_lower = 45
 
 x,y = np.meshgrid(np.linspace(x_lower,x_upper,x_upper-x_lower),np.linspace(y_lower,y_upper,y_upper-y_lower))
 
@@ -33,6 +33,7 @@ y_dir = gy[x_lower:x_upper,y_lower:y_upper]
 u = x_dir/np.sqrt(x_dir**2 + y_dir**2)
 v = y_dir/np.sqrt(x_dir**2 + y_dir**2)
 
+matplotlib.rc('figure', figsize=(8, 8))
 plt.quiver(x,y,u,v)
 plt.show()
 

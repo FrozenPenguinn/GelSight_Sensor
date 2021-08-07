@@ -4,6 +4,7 @@ from sklearn.cluster import MeanShift, estimate_bandwidth
 import matplotlib.pyplot as plt
 from math import sqrt
 import pickle
+from itertools import cycle
 
 # reading saved gradmap
 gradmap = np.load("gradmap.npy")
@@ -56,6 +57,19 @@ for key, item in rgbmap_raw.items():
     n_clusters_ = len(labels_unique)
     if (n_clusters_ > 1): # count collisions
         count += 1
+        # visualize certain bin
+        plt.figure(1)
+        plt.clf()
+        colors = cycle('bgrcmykbgrcmykbgrcmykbgrcmyk')
+        for k, col in zip(range(n_clusters_), colors):
+            my_members = labels == k # first determine whether is despired label
+            cluster_center = cluster_centers[k]
+            plt.plot(X[my_members, 0], X[my_members, 1], col + '.')
+            #plt.plot(cluster_center[0], cluster_center[1], 'o', markerfacecolor=col,markeredgecolor='k', markersize=14)
+        plt.title('Estimated number of clusters: %d' % n_clusters_)
+        plt_name = "./clustered_plots/" + str(key) + ".png"
+        plt.savefig(plt_name, bbox_inches='tight')
+        #plt.show()
     for n in range(0, n_clusters_):
         if (n == 0):
             my_members = labels == n
@@ -67,22 +81,6 @@ for key, item in rgbmap_raw.items():
             J_sub = J_arr[my_members]
             J = np.mean(J_sub, axis = 0)
             rgbmap_clustered[key].append((cluster_centers[n,0], cluster_centers[n,1], J))
-        '''
-    if (key == (-8, 3, 0)):
-        # visualize certain bin
-        import matplotlib.pyplot as plt
-        from itertools import cycle
-        plt.figure(1)
-        plt.clf()
-        colors = cycle('bgrcmykbgrcmykbgrcmykbgrcmyk')
-        for k, col in zip(range(n_clusters_), colors):
-            my_members = labels == k # first determine whether is despired label
-            cluster_center = cluster_centers[k]
-            plt.plot(X[my_members, 0], X[my_members, 1], col + '.')
-            #plt.plot(cluster_center[0], cluster_center[1], 'o', markerfacecolor=col,markeredgecolor='k', markersize=14)
-        plt.title('Estimated number of clusters: %d' % n_clusters_)
-        plt.show()
-        '''
 
 print("collision count: " + str(count))
 #print(rgbmap_clustered[(-8, 3, 0)])
