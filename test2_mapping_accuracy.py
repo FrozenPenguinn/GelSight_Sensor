@@ -64,6 +64,11 @@ pitch_ground_flat = pitch_ground.flatten()
 yaw_flat = yaw.flatten()
 yaw_ground_flat = yaw_ground.flatten()
 
+# correction
+for index in range(0, yaw_flat.shape[0]):
+    if (yaw_ground_flat[index] > 0 and yaw_flat[index] < -50):
+        yaw_flat[index] = - yaw_flat[index]
+
 # ground truth line
 line1_x = [0,60]
 line1_y = [0,60]

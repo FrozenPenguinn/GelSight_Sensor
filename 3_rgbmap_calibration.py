@@ -57,6 +57,7 @@ for key, item in rgbmap_raw.items():
     n_clusters_ = len(labels_unique)
     if (n_clusters_ > 1): # count collisions
         count += 1
+        '''
         # visualize certain bin
         plt.figure(1)
         plt.clf()
@@ -70,6 +71,7 @@ for key, item in rgbmap_raw.items():
         plt_name = "./clustered_plots/" + str(key) + ".png"
         plt.savefig(plt_name, bbox_inches='tight')
         #plt.show()
+        '''
     for n in range(0, n_clusters_):
         if (n == 0):
             my_members = labels == n
