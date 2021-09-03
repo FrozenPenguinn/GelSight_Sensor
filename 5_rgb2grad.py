@@ -88,6 +88,7 @@ plt.show()
 
 # gradient map of the testing img
 grad = np.zeros([width, height, 2], dtype = float)
+display = np.zeros([height, width], dtype = int)
 # change of color near target pixels
 dR_img = np.gradient(diff_img[:,:,2]) #dR[0][:,:] gives p, dR[1][:,:] gives q
 dG_img = np.gradient(diff_img[:,:,1])
@@ -145,6 +146,7 @@ for y in range(0, height):
                 J = rgbmap_kd[closest_key][0][2]
                 #print("start")
                 #print(J)
+                #J_tik = rgbmap_kd[closest_key][0][2]
                 J_tik = inv(J.T.dot(J) + 0.05 * np.identity(2)).dot(J.T)
                 #print(J_tik)
                 diff = J_tik.dot((np.asmatrix([R,G,B]).T - np.asmatrix(closest_key).T))
@@ -155,6 +157,7 @@ for y in range(0, height):
                 #print(grad[x][y])
                 #print("finish")
             else: # more than one cluster in closest key
+                display[y,x] = 1
                 #print("This is original: " + str(R) + " " + str(R) + " " + str(R))
                 #print("This is closest: " + str(closest_key))
                 count_dif_multi += 1
@@ -178,14 +181,20 @@ for y in range(0, height):
                     norm = np.linalg.norm(dI_pre - dI_img)
                     if (norm < min):
                         min = norm
-                        grad[x][y][0] = p
-                        grad[x][y][1] = q
+                        J_tik = inv(J_pre.T.dot(J_pre) + 0.05 * np.identity(2)).dot(J_pre.T)
+                        diff = J_tik.dot((np.asmatrix([R,G,B]).T - np.asmatrix(closest_key).T))
+                        grad[x][y][0] = p + diff[0]
+                        grad[x][y][1] = q + diff[1]
                 #print("not in bin and multi-clusters")
 
 print("This is count same: " + str(count_same))
 print("This is count multi clu: " + str(count_multi_clu))
 print("This is count diff: " + str(count_dif))
 print("This is count dif multi: " + str(count_dif_multi))
+
+plt.imshow(display)
+plt.show()
+
 map1 = np.flip(np.transpose(grad[:,:,0]), 0)
 map2 = np.flip(np.transpose(grad[:,:,1]), 0)
 x = np.arange(0, width, 1)

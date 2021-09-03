@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from math import sqrt
 import pickle
 from itertools import cycle
+from numpy.linalg import inv
 
 # reading saved gradmap
 gradmap = np.load("gradmap.npy")
@@ -23,6 +24,7 @@ for i in range(0, 401):
         J = np.matrix([[gradmap[i,j,0,1],gradmap[i,j,0,2]],
                        [gradmap[i,j,1,1],gradmap[i,j,1,2]],
                        [gradmap[i,j,2,1],gradmap[i,j,2,2]]]) * 100
+
         p = (i - 200) / 100
         q = (j - 200) / 100
         if (R, G, B) in rgbmap_raw:
@@ -77,11 +79,13 @@ for key, item in rgbmap_raw.items():
             my_members = labels == n
             J_sub = J_arr[my_members]
             J = np.mean(J_sub, axis = 0)
+            #J_tik = inv(J.T.dot(J) + 0.05 * np.identity(2)).dot(J.T) # to inverse processing speed
             rgbmap_clustered[key] = [(cluster_centers[0,0], cluster_centers[0,1], J)]
         else:
             my_members = labels == n
             J_sub = J_arr[my_members]
             J = np.mean(J_sub, axis = 0)
+            #J_tik = inv(J.T.dot(J) + 0.05 * np.identity(2)).dot(J.T) # to inverse processing speed
             rgbmap_clustered[key].append((cluster_centers[n,0], cluster_centers[n,1], J))
 
 print("collision count: " + str(count))

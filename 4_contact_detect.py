@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 # import background and contact image
 bg_img = cv2.imread("./img/set3/8.jpg")
-raw_img = cv2.imread("./img/set3/10.jpg")
+raw_img = cv2.imread("./img/set3/9.jpg")
 bg_img = cv2.GaussianBlur(bg_img, (3, 3), 0)
 raw_img = cv2.GaussianBlur(raw_img, (3, 3), 0)
 

@@ -7,9 +7,13 @@ from scipy.fftpack import dst, idst
 
 # import gradients
 grad = np.load( "grad.npy" )
-gx = grad[:,:,0]
-gy = grad[:,:,1]
-ydim, xdim, dim = grad.shape
+#gx = grad[:,:,0]
+#gy = grad[:,:,1]
+gx = grad[1,:,:]
+gy = grad[0,:,:]
+#ydim, xdim, dim = grad.shape
+dim, ydim, xdim = grad.shape
+#print(ydim, xdim, dim)
 
 # create smallest enclosing rectangle
 max_dim = max(xdim, ydim)
@@ -94,7 +98,7 @@ for x in range(0, ydim - 1):
 print("sum of error is: " + str(np.sum(e)))
 '''
 # visual augmentation
-zmap = hmap * 3
+zmap = hmap
 
 # visualize 3D height map
 fig = plt.figure(figsize = (8,8), dpi = 80)
@@ -104,8 +108,8 @@ fig.add_axes(ax)
 x = np.arange(0, max_dim, 1)
 y = np.arange(0, max_dim, 1)
 x, y = np.meshgrid(x, y)
-ax.plot_surface(x, y, zmap, rstride = 5, cstride = 5, cmap = plt.get_cmap('rainbow'))
-#ax.plot_surface(x, y, zmap, rstride = 5, cstride = 5)
+#ax.plot_surface(x, y, zmap, rstride = 5, cstride = 5, cmap = plt.get_cmap('rainbow'))
+ax.plot_surface(x, y, zmap, rstride = 5, cstride = 5)
 #ax.contourf(x, y, e, zdir = 'z', offset = -1, cmap = 'rainbow') # draw isoheight
 ax.set_xlabel('x')
 ax.set_ylabel('y')
