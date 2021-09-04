@@ -3,10 +3,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # import background and contact image
-bg_img = cv2.imread("./img/set3/8.jpg")
-raw_img = cv2.imread("./img/set3/9.jpg")
-bg_img = cv2.GaussianBlur(bg_img, (3, 3), 0)
-raw_img = cv2.GaussianBlur(raw_img, (3, 3), 0)
+#bg_img = cv2.imread("./img/set3/8.jpg")
+#raw_img = cv2.imread("./img/set3/9.jpg")
+#bg_img = cv2.GaussianBlur(bg_img, (3, 3), 0)
+#raw_img = cv2.GaussianBlur(raw_img, (3, 3), 0)
+
+# simulation
+bg_img = np.load("./sim_img/0_color.npy")[0,:,:,:]
+raw_img = np.load("./sim_img/1_color.npy")[0,:,:,:]
 
 # Select ROI
 roi = cv2.selectROI("Image", raw_img, showCrosshair=False, fromCenter=False)

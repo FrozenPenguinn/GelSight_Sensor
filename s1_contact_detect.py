@@ -3,10 +3,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # import background and contact image
-bg_img = cv2.imread("./img/set3/8.jpg")
-raw_img = cv2.imread("./img/set3/10.jpg")
-bg_img = cv2.GaussianBlur(bg_img, (3, 3), 0)
-raw_img = cv2.GaussianBlur(raw_img, (3, 3), 0)
+bg_img = np.load("./sim_img/0_color.npy")[0,:,:,:]
+raw_img = np.load("./sim_img/1_color.npy")[0,:,:,:]
+depth = np.load("./sim_img/1_depth.npy")[0,:,:]
+
+mm2pix = 10.9
+
+print(bg_img.shape)
 
 # rough estimation of contact zone using diff_img
 diff_img = np.max(np.abs(raw_img.astype(np.float32) - bg_img),axis = 2)
@@ -26,7 +29,7 @@ key = -1
 while key != 108: # l
     center = (int(x), int(y))
     radius = int(radius)
-    im2show = cv2.circle(np.array(raw_img), center, radius, (0, 40, 0), 2)
+    im2show = cv2.circle(np.array(raw_img), center, radius, (0, 40, 0), 1)
     cv2.imshow('contact zone', im2show.astype(np.uint8))
     key = cv2.waitKey(0)
     if key == 119: # w
@@ -58,9 +61,20 @@ x, y, radius = int(x), int(y), int(radius)
 raw_img = raw_img[y-radius : y+radius, x-radius : x+radius]
 bg_img = bg_img[y-radius : y+radius, x-radius : x+radius]
 contact_mask = contact_mask[y-radius : y+radius, x-radius : x+radius]
+depth = depth[y-radius : y+radius, x-radius : x+radius] * 1000 * mm2pix
+
+# create grad
+def depth2grad(depth):
+    grad = np.gradient(depth) # dR[0][:,:] gives p, dR[1][:,:] gives q
+    return grad
+
+grad = depth2grad(depth)
+print(len(grad))
 
 # save calibration parameters
 cv2.imwrite("./calibration/bg_img.jpg", bg_img)
 cv2.imwrite("./calibration/raw_img.jpg", raw_img)
 np.save("./calibration/contact_mask.npy", contact_mask)
+np.save("./calibration/grad.npy", grad)
+np.save("./calibration/depth.npy", depth)
 print("saving successful")

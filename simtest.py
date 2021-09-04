@@ -46,5 +46,4 @@ if __name__ == "__main__":
     show(depth)
     grad = depth2grad(depth)
     show(grad)
-    #np.save("grad.npy", grad)
     print("done")

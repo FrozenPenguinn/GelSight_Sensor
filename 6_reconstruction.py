@@ -9,10 +9,10 @@ from scipy.fftpack import dst, idst
 grad = np.load( "grad.npy" )
 #gx = grad[:,:,0]
 #gy = grad[:,:,1]
-gx = grad[1,:,:]
-gy = grad[0,:,:]
+gx = grad[:,:,0]
+gy = grad[:,:,1]
 #ydim, xdim, dim = grad.shape
-dim, ydim, xdim = grad.shape
+ydim, xdim, dim = grad.shape
 #print(ydim, xdim, dim)
 
 # create smallest enclosing rectangle
@@ -108,8 +108,8 @@ fig.add_axes(ax)
 x = np.arange(0, max_dim, 1)
 y = np.arange(0, max_dim, 1)
 x, y = np.meshgrid(x, y)
-#ax.plot_surface(x, y, zmap, rstride = 5, cstride = 5, cmap = plt.get_cmap('rainbow'))
-ax.plot_surface(x, y, zmap, rstride = 5, cstride = 5)
+#ax.plot_surface(x, y, zmap, rstride = 1, cstride = 1, cmap = plt.get_cmap('rainbow'))
+ax.plot_surface(x, y, zmap, rstride = 1, cstride = 1)
 #ax.contourf(x, y, e, zdir = 'z', offset = -1, cmap = 'rainbow') # draw isoheight
 ax.set_xlabel('x')
 ax.set_ylabel('y')
