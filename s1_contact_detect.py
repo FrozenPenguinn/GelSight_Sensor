@@ -48,14 +48,7 @@ while key != 108: # l
 # create a numpy array for masking
 contact_mask = np.zeros_like(contact_mask)
 cv2.circle(contact_mask, center, radius, (1), -1)
-'''
-# show contact mask for confirmation
-plt.title("masking area")
-display = contact_mask
-plt.imshow(display, origin='lower', extent=[0, width, 0, height])
-plt.colorbar()
-plt.show()
-'''
+
 # crop to square size
 x, y, radius = int(x), int(y), int(radius)
 raw_img = raw_img[y-radius : y+radius, x-radius : x+radius]
@@ -70,6 +63,14 @@ def depth2grad(depth):
 
 grad = depth2grad(depth)
 print(len(grad))
+
+# show contact mask for confirmation
+plt.title("masking area")
+display = grad[0]
+plt.imshow(display, origin='lower', extent=[0, width, 0, height])
+plt.colorbar()
+plt.show()
+
 
 # save calibration parameters
 cv2.imwrite("./calibration/bg_img.jpg", bg_img)

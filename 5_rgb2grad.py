@@ -192,8 +192,10 @@ print("This is count multi clu: " + str(count_multi_clu))
 print("This is count diff: " + str(count_dif))
 print("This is count dif multi: " + str(count_dif_multi))
 
+'''
 plt.imshow(display)
 plt.show()
+'''
 
 map1 = np.flip(np.transpose(grad[:,:,0]), 0)
 map2 = np.flip(np.transpose(grad[:,:,1]), 0)

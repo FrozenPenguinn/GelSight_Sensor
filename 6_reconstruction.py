@@ -11,6 +11,7 @@ grad = np.load( "grad.npy" )
 #gy = grad[:,:,1]
 gx = grad[:,:,0]
 gy = grad[:,:,1]
+
 #ydim, xdim, dim = grad.shape
 ydim, xdim, dim = grad.shape
 #print(ydim, xdim, dim)
@@ -20,6 +21,37 @@ max_dim = max(xdim, ydim)
 min_dim = min(xdim, ydim)
 
 print(1)
+
+# grad difference
+original_grad = np.load("./testing/original_grad.npy")
+
+grad_recon = np.zeros_like(original_grad)
+grad_recon[0,:,:] = gx.T
+grad_recon[1,:,:] = gy.T
+
+print(grad.shape)
+print(original_grad.shape)
+diff_grad = (grad_recon - original_grad)[0]
+# visualize
+fig = plt.figure(figsize = (8,8), dpi = 80)
+ax = Axes3D(fig, auto_add_to_figure = False)
+ax = fig.add_subplot(1, 1, 1, projection='3d') # first plot
+fig.add_axes(ax)
+x = np.arange(0, ydim, 1)
+y = np.arange(0, xdim, 1)
+x, y = np.meshgrid(x, y)
+#ax.plot_surface(x, y, zmap, rstride = 1, cstride = 1, cmap = plt.get_cmap('rainbow'))
+ax.plot_surface(x, y, diff_grad, rstride = 1, cstride = 1)
+#ax.contourf(x, y, diff_grad, zdir = 'z', cmap = 'rainbow') # draw isoheight
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+ax.set_zlabel('z')
+ax.set_xlim3d(0, max_dim)
+ax.set_ylim3d(0, max_dim)
+#ax.set_zlim3d(0, max_dim)
+ax.set_title('error in gradient')
+plt.show()
+
 
 '''
 # Integration based on line integrals
@@ -100,6 +132,10 @@ print("sum of error is: " + str(np.sum(e)))
 # visual augmentation
 zmap = hmap
 
+# gradient and height difference
+original_depth = np.load("./testing/original_depth.npy")
+diff_depth = zmap - original_depth
+
 # visualize 3D height map
 fig = plt.figure(figsize = (8,8), dpi = 80)
 ax = Axes3D(fig, auto_add_to_figure = False)
@@ -110,7 +146,7 @@ y = np.arange(0, max_dim, 1)
 x, y = np.meshgrid(x, y)
 #ax.plot_surface(x, y, zmap, rstride = 1, cstride = 1, cmap = plt.get_cmap('rainbow'))
 ax.plot_surface(x, y, zmap, rstride = 1, cstride = 1)
-#ax.contourf(x, y, e, zdir = 'z', offset = -1, cmap = 'rainbow') # draw isoheight
+#ax.contourf(x, y, zmap, zdir = 'z', cmap = 'rainbow') # draw isoheight
 ax.set_xlabel('x')
 ax.set_ylabel('y')
 ax.set_zlabel('z')

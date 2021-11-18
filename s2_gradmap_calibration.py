@@ -77,14 +77,14 @@ for x in range(0, width):
 
 # gradmap = np.round(gradmap).astype(int)
 # testing
-'''
+
 plt.xlabel('dx')
 plt.ylabel('dy')
 plt.title("initial gradmap")
 display = gradmap[:,:,0]
 plt.imshow(display)
 plt.show()
-'''
+
 # saving for future comparison
 initial_gradmap = gradmap.copy()
 
@@ -172,8 +172,8 @@ for channel in range(0,3):
 # testing
 plt.xlabel('dx')
 plt.ylabel('dy')
-plt.title("final gradmap")
-display = gradmap[:,:,1]
+plt.title("final gradmap (blue)")
+display = gradmap[:,:,0]
 #plt.colorbar()
 plt.imshow(display)
 plt.show()
